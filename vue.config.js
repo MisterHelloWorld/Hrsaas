@@ -8,22 +8,10 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
 
-// If your port is set to 80,
-// use administrator privileges to execute the command line.
-// For example, Mac: sudo npm run
-// You can change the port by the following methods:
-// port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
-  /**
-   * You will need to set publicPath if you plan to deploy your site under a sub path,
-   * for example GitHub Pages. If you plan to deploy your site to https://foo.github.io/bar/,
-   * then publicPath should be set to "/bar/".
-   * In most cases please use '/' !!!
-   * Detail: https://cli.vuejs.org/config/#publicpath
-   */
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
@@ -35,6 +23,19 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    // 解决跨域问题，本地服务器反向代理技术
+    proxy: {
+      // 配置了本地服务器代理，真正发起请求时，请求接口地址不需要写协议+域名+端口（即请求根路径），因为没有必要
+      // 无论根路径写什么，只要写了api，就会触发代理，api前面就会自动被替换成目标代理地址作为请求根路径
+      '/api': {
+        target: 'http://localhost:3000', // 我们要代理的地址
+        changeOrigin: true, // 是否跨域
+        pathRewrite: {
+          // 重写路径，即把触发代理的关键词去除
+          '^/api': ''
+        }
+      }
     }
     // before: require('./mock/mock-server.js')
   },
