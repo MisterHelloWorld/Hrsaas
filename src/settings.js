@@ -7,5 +7,5 @@ module.exports = {
   fixedHeader: false,
 
   // 是否显示左侧菜单logo
-  sidebarLogo: false
+  sidebarLogo: true
 }

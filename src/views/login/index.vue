@@ -115,7 +115,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (route) {
+      handler: function(route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
@@ -137,7 +137,7 @@ export default {
     // 登录（点击或回车）触发
     handleLogin() {
       // 获取表单实例上的validate方法，对表单整体校验
-      this.$refs.loginForm.validate(async (isOk) => {
+      this.$refs.loginForm.validate(async(isOk) => {
         // 如果校验通过，执行里面代码
         if (isOk) {
           try {
