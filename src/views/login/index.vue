@@ -12,7 +12,7 @@
     >
       <div class="title-container">
         <h3 class="title">
-          <img src="@/assets/common/login-logo.png" alt="">
+          <img src="@/assets/common/login-logo.png" alt="" />
         </h3>
       </div>
       <!-- TAG：登录表单-手机号 -->
@@ -76,7 +76,10 @@
 
 <script>
 import { validMobile } from '@/utils/validate'
-
+// 引入element里的消息提示方法
+import { Message } from 'element-ui'
+// 引入辅助函数
+import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data() {
@@ -112,13 +115,15 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
   },
   methods: {
+    // 使用辅助函数扩展出actions里相应的方法
+    ...mapActions(['user/login']),
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -129,22 +134,29 @@ export default {
         this.$refs.password.focus()
       })
     },
+    // 登录（点击或回车）触发
     handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          this.loading = true
-          this.$store
-            .dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/' })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
+      // 获取表单实例上的validate方法，对表单整体校验
+      this.$refs.loginForm.validate(async (isOk) => {
+        // 如果校验通过，执行里面代码
+        if (isOk) {
+          try {
+            // 发起请求前，显示loading加载状态
+            this.loading = true
+            // 调用actions里的登录方法，由于该方法被async修饰，属于异步任务，需要再次使用await修饰，强制等待
+            await this['user/login'](this.loginForm)
+            // 强制等待状态下，只有当请求成功，才会执行这条代码，请求失败，请求内部reject终止执行，此处不执行
+            this.$router.push('/')
+          } catch (error) {
+            // 当请求不成功，出现错误，捕捉错误，这里不需要弹出错误提示，响应拦截器已做过响应处理
+            console.log(error)
+          } finally {
+            // 请求结束后，关闭loading加载状态
+            this.loading = false
+          }
         } else {
-          console.log('error submit!!')
-          return false
+          // 如果校验失败，利用element提供的方法提示错误信息
+          Message.error('格式校验错误')
         }
       })
     }

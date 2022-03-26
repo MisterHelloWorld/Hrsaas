@@ -30,11 +30,7 @@ module.exports = {
       // 无论根路径写什么，只要写了api，就会触发代理，api前面就会自动被替换成目标代理地址作为请求根路径
       '/api': {
         target: 'http://localhost:3000', // 我们要代理的地址
-        changeOrigin: true, // 是否跨域
-        pathRewrite: {
-          // 重写路径，即把触发代理的关键词去除
-          '^/api': ''
-        }
+        changeOrigin: true // 是否跨域
       }
     }
     // before: require('./mock/mock-server.js')
