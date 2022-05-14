@@ -3,10 +3,12 @@
 // 按需导入本地存储相关的三个方法
 import { getToken, setToken, removeToken } from '@/utils/auth.js'
 // 按需导入用户相关请求方法
-import { login } from '@/api/user.js'
+import { login, getUserInfo } from '@/api/user.js'
 const state = {
   // 用户身份令牌
-  token: getToken()
+  token: getToken(),
+  // 用户信息
+  userInfo: {}
 }
 const mutations = {
   // XXX：更新state里面token值的方法
@@ -23,6 +25,16 @@ const mutations = {
     state.token = null
     // 同时移除本地存储
     removeToken()
+  },
+
+  // XXX：更新state里面userInfo的方法
+  setUserInfo(state, result) {
+    state.userInfo = result
+  },
+
+  // XXX：删除state里面userInfo的方法
+  removeUserInfo(state) {
+    state.userInfo = {}
   }
 }
 const actions = {
@@ -32,6 +44,14 @@ const actions = {
     const result = await login(requestData)
     // 调用 setToken方法，并传入获取到的token值，更新到state里的token中
     commit('setToken', result)
+  },
+
+  // XXX：获取用户信息的方法
+  async getUserInfo(context) {
+    // 发送axios请求：获取用户信息
+    const result = await getUserInfo()
+    // 将用户信息结果传递给mutations里的setUserInfo方法中，修改state里userInfo的值
+    context.commit('setUserInfo', result)
   }
 }
 export default {

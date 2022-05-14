@@ -12,7 +12,7 @@
     >
       <div class="title-container">
         <h3 class="title">
-          <img src="@/assets/common/login-logo.png" alt="" />
+          <img src="@/assets/common/login-logo.png" alt="">
         </h3>
       </div>
       <!-- TAG：登录表单-手机号 -->

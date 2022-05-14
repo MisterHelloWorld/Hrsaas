@@ -1,7 +1,9 @@
 // TODO:request请求
 import axios from 'axios'
-// 引入element里的消息提示方法
+// 引入element里的消息提示方法(原因是这是一个js文件，没办法通过this.$message使用)
 import { Message } from 'element-ui'
+import store from '@/store'
+
 // 创建一个axios实例对象request，并配置基地址
 const request = axios.create({
   // 当处于开发环境（npm run dev)，基地址为 '/api'，当处于生产环境（npm run build），基地址为 '/prod-api'
@@ -11,7 +13,20 @@ const request = axios.create({
 })
 
 // 请求拦截器，在请求发送之前携带token
-request.interceptors.request.use()
+request.interceptors.request.use(
+  function(config) {
+    // 在发送请求之前做些什么
+    const { token } = store.getters
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  function(error) {
+    // 对请求错误做些什么
+    return Promise.reject(error)
+  }
+)
 
 // 响应拦截器，在请求数据返回之后，对数据进行一些处理
 request.interceptors.response.use(
