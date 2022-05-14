@@ -9,10 +9,17 @@ export const login = (data) =>
     data
   })
 
-// XXX：axios 获取用户基本资料请求
+// XXX：axios 获取用户资料请求
 export function getUserInfo() {
   return request({
     url: '/sys/profile',
     method: 'POST'
+  })
+}
+
+// XXX：axios 根据用户ID获取用户基本信息（为了获取头像）
+export function getUserDetailById(id) {
+  return request({
+    url: `/sys/user/${id}`
   })
 }

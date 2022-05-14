@@ -29,7 +29,7 @@ module.exports = {
       // 配置了本地服务器代理，真正发起请求时，请求接口地址不需要写协议+域名+端口（即请求根路径），因为没有必要
       // 无论根路径写什么，只要写了api，就会触发代理，api前面就会自动被替换成目标代理地址作为请求根路径
       '/api': {
-        target: 'http://localhost:3000', // 我们要代理的地址
+        target: 'http://ihrm.itheima.net/', // 我们要代理的地址
         changeOrigin: true // 是否跨域
       }
     }

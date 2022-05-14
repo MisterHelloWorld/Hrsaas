@@ -16,10 +16,16 @@
     <!-- TAG：右侧下拉菜单 -->
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
-        <!-- TAG：头像 -->
+        <!-- TAG：用户信息 -->
         <div class="avatar-wrapper">
-          <img src="@/assets/common/bigUserHeader.png" class="user-avatar" />
-          <span class="name">管理员</span>
+          <!-- 头像 -->
+          <img
+            v-imageError="defaultImg"
+            :src="staffPhoto"
+            class="user-avatar"
+          >
+          <!-- 用户名称 -->
+          <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <!-- TAG：菜单选项 -->
@@ -47,11 +53,13 @@ export default {
   components: {
     Hamburger
   },
-  computed: {
-    ...mapGetters(['sidebar', 'avatar'])
+  data() {
+    return {
+      defaultImg: require('@/assets/common/head.jpg')
+    }
   },
-  created() {
-    this.$store.dispatch('user/getUserInfo')
+  computed: {
+    ...mapGetters(['sidebar', 'avatar', 'name', 'staffPhoto'])
   },
   methods: {
     toggleSideBar() {
@@ -145,7 +153,6 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
         position: relative;
 
         .user-avatar {

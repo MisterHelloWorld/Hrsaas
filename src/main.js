@@ -16,6 +16,9 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+// 加载自定义指令的js文件
+import '@/directives'
+
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明

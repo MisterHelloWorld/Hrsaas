@@ -12,7 +12,7 @@ import 'nprogress/nprogress.css'
 const whiteList = ['/login', '/404']
 
 // 路由前置守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   // 首先开启进度条
   NProgress.start()
   // 如果存在token
@@ -21,6 +21,10 @@ router.beforeEach((to, from, next) => {
       // 进一步判断，如果去往的是登录页，强制跳转到主页
       next('/')
     } else {
+      // 如果存在token，并且前往其他页面的时候，判断是否存在用户信息，不存在，调用获取用户信息的方法
+      if (!store.getters.userId) {
+        await store.dispatch('user/getUserInfo')
+      }
       // 其余正常放行
       next()
     }
